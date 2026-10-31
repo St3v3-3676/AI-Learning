@@ -1,7 +1,7 @@
 class Student:
     def __init__(self, name: str, age: int, grade: int):
         self.name = name
-        self.update_age(age)
+        self.age = age
         self.grade = grade
 
 
@@ -14,10 +14,15 @@ class Student:
     def is_adult(self) -> bool:
         return self.age >= 18
 
-    def update_age(self, new_age: int) -> None:
-        if new_age < 0 or new_age > 120:
+    @property
+    def age(self) -> int:
+        return self._age
+
+    @age.setter
+    def age(self, value: int) -> None:
+        if value < 0 or value > 120:
             raise ValueError("Invalid student age")
-        self._age = new_age
+        self._age = value
 
 student1 = Student("Alex",14,8)
 student1.display_info()
@@ -42,5 +47,9 @@ print()
 student6 = Student("Steve",15,10)
 student6.display_info()
 print()
-student6.update_age(-10)
+student6.age = 10
 student6.display_info()
+
+print(student1.age)
+student1.age = 10
+print(student1.age)
