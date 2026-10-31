@@ -3,5 +3,6 @@ def main():
     print("Python development environment is working.")
     print("Let's explore some AI concepts and build amazing projects together.")
     print("Test git hub")
+    print("Test again")
 if __name__ == "__main__":
     main()
