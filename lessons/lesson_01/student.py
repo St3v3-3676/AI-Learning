@@ -1,55 +1,31 @@
-class Student:
-    def __init__(self, name: str, age: int, grade: int):
-        self.name = name
-        self.age = age
+from person import Person
+
+class Student(Person):
+    def __init__(self, student_id: str, name: str, age: int, grade: int):
+        super().__init__(name, age)
+        self._student_id = student_id
         self.grade = grade
+
+    @property
+    def student_id(self):
+        return self._student_id
+
+    @property
+    def student_id(self):
+        return self._student_id
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Student):
+            return NotImplemented
+
+        return self.student_id == other.student_id
+
+    def __hash__(self) -> int:
+        return hash(self.student_id)
 
 
     def display_info(self):
-        print(f"Student Name: {self.name}")
-        print(f"Age: {self.age}")
+        super().display_info()
         print(f"Grade {self.grade}")
-        print(f"Is an adult? {self.is_adult()}")
-    
-    def is_adult(self) -> bool:
-        return self.age >= 18
+        print(f"Student ID: {self.student_id}")
 
-    @property
-    def age(self) -> int:
-        return self._age
-
-    @age.setter
-    def age(self, value: int) -> None:
-        if value < 0 or value > 120:
-            raise ValueError("Invalid student age")
-        self._age = value
-
-student1 = Student("Alex",14,8)
-student1.display_info()
-print()
-
-student2 = Student("Sam",15,8)
-student2.display_info()
-print()
-
-student3 = Student("Jordan",16,10)
-student3.display_info()
-print()
-
-student4 = Student("Steve",18,10)
-student4.display_info()
-print()
-
-student5 = Student("Chris",5,9)
-student5.display_info()
-print()
-
-student6 = Student("Steve",15,10)
-student6.display_info()
-print()
-student6.age = 10
-student6.display_info()
-
-print(student1.age)
-student1.age = 10
-print(student1.age)
