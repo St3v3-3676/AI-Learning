@@ -1,12 +1,11 @@
-from person import Person
-from student import Student
-from teacher import Teacher
-from reports import Report
-from teacherReport import TeacherReport
-from studentReport import StudentReport
+from report_protocol import Reportable
+from exam_report import ExamReport
 
-reports: list[Report] = [TeacherReport(), StudentReport()]
 
-for report in reports:
+def print_report(report: Reportable) -> None:
     print(report.generate_report())
+
+
+exam = ExamReport("Computer Science")
+print_report(exam)
 
