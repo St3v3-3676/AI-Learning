@@ -1,5 +1,6 @@
 from ai_model import AIModel 
 from fake_model import FakeModel
+from failing_model import FailingModel
 
 class AIChatbot:
     def __init__(self, model: AIModel):
@@ -7,12 +8,14 @@ class AIChatbot:
 
     def ask(self, prompt: str) -> str:
         # Placeholder implementation for generating a response
-        return self.model.ask(prompt)
+        try:
+            response = self.model.ask(prompt)
+        except ConnectionError:
+            return "Sorry, the AI service is currently unavailable."
+        else:
+            return response
 
-model = FakeModel()  # Replace with your actual AI model implementation
-chatbot = AIChatbot(model)
 
-response = chatbot.ask("What is the capital of France?")
-print(response)  # Output: This a test response
+
 
 
