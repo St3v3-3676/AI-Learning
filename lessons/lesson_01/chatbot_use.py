@@ -6,5 +6,5 @@ from failing_model import FailingModel
 model = FakeModel()  # Replace with your actual AI model implementation
 chatbot = AIChatbot(model)
 
-response = chatbot.ask("What is the capital of France?")
-print(response)  # Output: This a test response
+response = chatbot.ask("  ")
+print(response)  # Output: This is a test response

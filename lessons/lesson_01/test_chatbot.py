@@ -1,3 +1,5 @@
+import pytest
+
 from ai_chatbot import AIChatbot
 from fake_model import FakeModel
 from failing_model import FailingModel
@@ -29,6 +31,18 @@ def test_chatbot_calls_model_once():
 
     chatbot.ask("What is the capital of France?")
     assert model.call_count == 1
+
+def test_chatbot_rejects_empty_prompt():
+    model = FakeModel()
+    chatbot = AIChatbot(model)
+
+    with pytest.raises(ValueError):
+        chatbot.ask("")
+
+    assert model.call_count == 0  # Ensure the model's ask method was not called
+    
+
+    
 
 
 
