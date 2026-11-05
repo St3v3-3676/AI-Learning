@@ -1,6 +1,12 @@
+from unittest.mock import Mock
+
+
+import pytest
+
 from ai_model import AIModel 
 from fake_model import FakeModel
 from failing_model import FailingModel
+
 
 class AIChatbot:
     def __init__(self, model: AIModel):
@@ -17,8 +23,8 @@ class AIChatbot:
         except ConnectionError:
             return "Sorry, the AI service is currently unavailable."
         else:
+            print(response)
             return response
-
 
 
 

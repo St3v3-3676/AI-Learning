@@ -6,4 +6,4 @@ model.ask.return_value = "This is a test response"  # Replace with your actual A
 chatbot = AIChatbot(model)
 
 response = chatbot.ask("Hello")
-print(response)  # Output: This is a test response
+print(response)  # Output: This is a test response q

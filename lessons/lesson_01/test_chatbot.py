@@ -3,6 +3,7 @@ import pytest
 from ai_chatbot import AIChatbot
 from fake_model import FakeModel
 from failing_model import FailingModel
+from mock_model import Mock
 
 @pytest.fixture
 def chatbot():
@@ -34,9 +35,36 @@ def test_chatbot_rejects_empty_prompt(chatbot):
 def test_chatbot_strips_whitespace(chatbot):
     chatbot.ask("   Explain Python   ")
     assert chatbot.model.last_prompt == "Explain Python"
-    
 
+
+def test_unexpected_error():
+    model = Mock()
+    model.ask.side_effect = ValueError("Invalid Model")
+
+    chatbot = AIChatbot(model)
+
+    with pytest.raises(ValueError):
+        chatbot.ask("Hello")
+
+    model.ask.assert_called_once_with("Hello") 
     
+    
+def test_connection_error():
+    model = Mock()
+
+    model.ask.side_effect = ConnectionError(
+        "Service unavailable"
+    )
+
+    chatbot = AIChatbot(model)
+
+    response = chatbot.ask("Hello")
+
+    assert response == (
+        "Sorry, the AI service is currently unavailable."
+    )
+
+    model.ask.assert_called_once_with("Hello")
 
 
 
