@@ -47,3 +47,9 @@ def test_update_subject(student: StudentProfile) -> None:
 def test_whitespace_removal(student: StudentProfile) -> None:
     student.subject = "  Computer Science  "
     assert student.subject == "Computer Science"
+
+def test_display_info(student: StudentProfile) -> None:
+    profile = student.display_profile()
+
+    assert profile == f"Student Name: Alice\nYear Group: 10\nSubject: Mathematics"
+
