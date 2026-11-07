@@ -14,5 +14,6 @@ multiple_choice_question: MultipleChoiceQuestion = MultipleChoiceQuestion(subjec
                                 )
 
 print(multiple_choice_question.display_question())
-print(multiple_choice_question.evaluate_answer("Central Processing Unit"))
+print(multiple_choice_question.evaluate_answer("Central rocessing Unit"))
+
 

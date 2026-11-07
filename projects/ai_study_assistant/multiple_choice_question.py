@@ -8,6 +8,10 @@ class MultipleChoiceQuestion(StudyQuestion):
                  choices:list[str]
                  ) -> None:
         super().__init__(subject,question,answer,max_mark)
+
+        if answer not in choices:
+            raise ValueError("Correct answer is not in the available choices")
+        
         self.choices = choices
 
     def display_question(self) -> str:
@@ -19,5 +23,26 @@ class MultipleChoiceQuestion(StudyQuestion):
             letter_code += 1
         
         return output
+
+    def evaluate_answer(self, student_answer: str) -> int:
+        awarded_marks: int = super().evaluate_answer(student_answer)
+
+        if awarded_marks == self.max_mark:
+            return awarded_marks
+        else:
+            if (chr(65 + self.choices.index(self.answer)).lower() == student_answer.strip().lower()):
+                return self.max_mark
+            else:
+                return 0
+
+
+
+        
+
+
+
+
+
+
 
 
