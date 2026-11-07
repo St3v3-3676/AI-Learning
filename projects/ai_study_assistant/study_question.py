@@ -22,6 +22,10 @@ class StudyQuestion:
     def display_question(self) -> str:
         return f"Question: {self.question}\nMarks: {self.max_mark}\n"
 
-    
+    def evaluate_answer(self, student_answer:str) -> int:
+        if student_answer.strip().lower() == self.answer.strip().lower():
+            return self.max_mark
+        else:
+            return 0
 
 

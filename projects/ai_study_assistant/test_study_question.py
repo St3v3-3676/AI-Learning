@@ -50,4 +50,18 @@ def test_invalid_property_value_preserves_state(max_mark: object, study_question
         study_question.max_mark = max_mark
 
     assert study_question.max_mark == 3
+
+@pytest.mark.parametrize("student_answer", [
+                            "Central Processing Unit",
+                            "central processing unit",
+                            "  CENTRAL PROCESSING UNIT  "])
+def test_correct_evaluate_answer_for_correct_answer(student_answer: str, study_question: StudyQuestion) -> None:
+    assert study_question.evaluate_answer(student_answer) == study_question.max_mark
     
+@pytest.mark.parametrize("student_answer", [
+                            "Computer Processing Unit",
+                            "CPU",
+                            "",
+                            "1234"])
+def test_incorrect_evaluate_answer_for_correct_answer(student_answer: str, study_question: StudyQuestion) -> None:
+    assert study_question.evaluate_answer(student_answer) == 0
