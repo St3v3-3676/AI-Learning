@@ -20,7 +20,7 @@ class StudyQuestion:
         self._max_mark = max_mark
 
     def display_question(self) -> str:
-        return f"Question: {self.question}\nMarks: {self.max_mark}"
+        return f"Question: {self.question}\nMarks: {self.max_mark}\n"
 
     
 

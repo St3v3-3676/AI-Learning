@@ -33,7 +33,7 @@ def test_study_question_constructor_attributes(study_question: StudyQuestion) ->
     assert study_question.max_mark == 3
 
 def test_question_display_formating(study_question: StudyQuestion) -> None:
-    assert study_question.display_question() == "Question: What does the term CPU stand for?\nMarks: 3"
+    assert study_question.display_question() == "Question: What does the term CPU stand for?\nMarks: 3\n"
 
 @pytest.mark.parametrize("max_mark", [2.5,"five",True,False,None])
 def test_invalid_property_type_value_preserves_state(max_mark: object, study_question: StudyQuestion) -> None:
