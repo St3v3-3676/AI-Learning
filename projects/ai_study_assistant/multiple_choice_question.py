@@ -8,6 +8,8 @@ class MultipleChoiceQuestion(StudyQuestion):
                  choices:list[str]
                  ) -> None:
         super().__init__(subject,question,answer,max_mark)
+        if len(choices) < 2:
+            raise ValueError("There must be at least two choices for this question")
 
         if answer not in choices:
             raise ValueError("Correct answer is not in the available choices")
