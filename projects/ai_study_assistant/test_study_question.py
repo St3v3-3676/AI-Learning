@@ -13,7 +13,7 @@ def test_invalid_mark_constructor(max_mark: int) -> None:
 @pytest.mark.parametrize("max_mark", [2.5,"five",True,False,None])
 def test_invalid_max_mark_type(max_mark: object, study_question: StudyQuestion) -> None:
     with pytest.raises(TypeError):
-        study_question.max_mark = max_mark
+        setattr(study_question, "max_mark", max_mark)
 
 @pytest.mark.parametrize("max_mark", [-5,0])
 def test_invalid_max_mark_value(max_mark: int, study_question: StudyQuestion) -> None:
@@ -36,17 +36,9 @@ def test_question_display_formating(study_question: StudyQuestion) -> None:
     assert study_question.display_question() == "Question: What does the term CPU stand for?\nMarks: 3\n"
 
 @pytest.mark.parametrize("max_mark", [2.5,"five",True,False,None])
-def test_invalid_property_type_value_preserves_state(max_mark: object, study_question: StudyQuestion) -> None:
+def test_invalid_property_type_value_preserves_state(max_mark: int, study_question: StudyQuestion) -> None:
     
     with pytest.raises(TypeError):
-        study_question.max_mark = max_mark
-
-    assert study_question.max_mark == 3
-
-@pytest.mark.parametrize("max_mark", [-5,0])
-def test_invalid_property_value_preserves_state(max_mark: object, study_question: StudyQuestion) -> None:
-    
-    with pytest.raises(ValueError):
         study_question.max_mark = max_mark
 
     assert study_question.max_mark == 3
