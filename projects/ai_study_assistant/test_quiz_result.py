@@ -28,3 +28,11 @@ def test_quiz_result_constructor_valid_total_marks_available_and_marks_awarded_v
     assert quiz_result.marks_awarded == marks_awarded 
     assert quiz_result.total_marks_available == total_marks_available
 
+@pytest.mark.parametrize("total_marks_available,marks_awarded,expected_percentage",[(20, 0, 0.0),(20, 5, 25.0),(20, 10, 50.0),(20, 15, 75.0),(20,20,100.0)])
+def test_quiz_result_percentage_for_correct_percentage(total_marks_available: int, marks_awarded: int, expected_percentage: float) -> None:
+    quiz_result: QuizResult = QuizResult(total_marks_available,marks_awarded)
+
+    assert quiz_result.percentage == expected_percentage
+    
+    
+

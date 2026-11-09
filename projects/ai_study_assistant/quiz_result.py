@@ -15,6 +15,10 @@ class QuizResult:
             raise ValueError("Awarded marks cannot be more that the total marks available")
 
         self.marks_awarded = marks_awarded
+
+    @property
+    def percentage(self) -> float:
+        return self.marks_awarded / self.total_marks_available * 100
         
 
         
