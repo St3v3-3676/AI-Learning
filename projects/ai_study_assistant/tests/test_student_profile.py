@@ -1,5 +1,5 @@
 import pytest
-from student_profile import StudentProfile
+from models.student_profile import StudentProfile
 
 @pytest.fixture
 def student() -> StudentProfile:

@@ -1,4 +1,4 @@
-from study_question import StudyQuestion
+from models.study_question import StudyQuestion
 
 class MultipleChoiceQuestion(StudyQuestion):
     def __init__(self, subject: str, 

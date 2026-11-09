@@ -1,5 +1,5 @@
 import pytest
-from multiple_choice_question import MultipleChoiceQuestion
+from models.multiple_choice_question import MultipleChoiceQuestion
 
 @pytest.fixture
 def multiple_choice_question_4_choices() -> MultipleChoiceQuestion:

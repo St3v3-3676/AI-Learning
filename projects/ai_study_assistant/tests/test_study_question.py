@@ -1,5 +1,5 @@
 import pytest
-from study_question import StudyQuestion
+from models.study_question import StudyQuestion
 
 @pytest.fixture
 def study_question() -> StudyQuestion:

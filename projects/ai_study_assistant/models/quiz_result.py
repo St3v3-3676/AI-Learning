@@ -20,7 +20,7 @@ class QuizResult:
     def percentage(self) -> float:
         return self.marks_awarded / self.total_marks_available * 100
         
-
+    
         
 
         

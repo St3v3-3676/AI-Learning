@@ -1,5 +1,5 @@
 import pytest
-from quiz_result import QuizResult
+from models.quiz_result import QuizResult
 
 @pytest.mark.parametrize("total_marks_available",["5","five",True,False])
 def test_quiz_result_constructor_invalid_total_marks_available_type(total_marks_available: object) -> None:
@@ -34,5 +34,5 @@ def test_quiz_result_percentage_for_correct_percentage(total_marks_available: in
 
     assert quiz_result.percentage == pytest.approx(expected_percentage)
     
-    
+   
 
