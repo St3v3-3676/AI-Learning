@@ -31,3 +31,18 @@ def test_quiz_controller_calls_mark_quiz_once() -> None:
     mock_quiz.mark_quiz.assert_called_once_with(["8"])
     assert actual_result is expected_result
 
+def test_quiz_controller_propagates_value_error() -> None:
+    #This ARRANGES a fake/mock quiz and configures it to raise a ValueError
+    mock_quiz = mock.Mock(spec=Quiz)
+    mock_quiz.mark_quiz.side_effect = ValueError("Too many answers")
+
+    #This ACTS by creating a quiz_controller instance and configures it with the fake/ moc quiz
+    quiz_controller: QuizController = QuizController(mock_quiz)
+
+    #This ASSERTS that a ValueError is propagated from the quiz class to 
+    #verify that the exception reaches the caller (quiz_controller)
+    with pytest.raises(ValueError):
+       quiz_controller.submit_answers(["8"])
+
+   
+
