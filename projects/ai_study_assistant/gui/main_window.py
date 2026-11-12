@@ -57,13 +57,13 @@ class MainWindow(QWidget):
 
         self.reset_quiz_button = QPushButton("Reset Quiz")
         self.reset_quiz_button.setFont(QFont("Arial", 12))
-        self.reset_quiz_button.clicked.connect(self.quiz_controller.reset_quiz)
+        self.reset_quiz_button.clicked.connect(self.restart_quiz)
         self.reset_quiz_button.hide()
 
         self.start_button = QPushButton("Start Quiz")
         self.start_button.clicked.connect(self.start_quiz)
+        
         layout.addWidget(self.start_button)
-
         layout.addWidget(self.label_quiz_title)
         layout.addWidget(self.label_quiz_select)
         layout.addWidget(self.question_number_label)
@@ -104,6 +104,8 @@ class MainWindow(QWidget):
             self.answer_button.hide()
             quiz_result: QuizResult = self.quiz_controller.submit_answers(self.quiz_controller.student_answers)
             self.result_label.setText(f"Your score: {quiz_result.percentage}%")
+            self.reset_quiz_button.show()
+
   
     def show_next_question(self) -> None:
         self.answer_input.clear()
@@ -114,9 +116,13 @@ class MainWindow(QWidget):
         self.answer_button.setEnabled(True)
         self.next_question_button.setEnabled(False)
 
-
-
-
+    def restart_quiz(self) -> None:
+        self.quiz_controller.reset_quiz()
+        self.answer_input.clear()
+        self.result_label.clear()
+        self.reset_quiz_button.hide()
+        self.next_question_button.hide()
+        self.start_quiz()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
