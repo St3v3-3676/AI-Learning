@@ -5,6 +5,23 @@ from models.quiz_result import QuizResult
 from models.study_question import StudyQuestion
 from unittest import mock
 
+@pytest.fixture
+def quiz_controller() -> QuizController:
+     return QuizController(Quiz("Computer Science",[            
+                StudyQuestion(
+                    "Computer Science",
+                    "How many bits in a byte?",
+                    "8",
+                    2),
+                StudyQuestion(
+                    "Computer Science",
+                    "How many bytes in a Kibibyte?",
+                    "1024",
+                    2)
+                    ]    
+                )
+            )
+
 def test_quiz_controller_submits_correct_answer() -> None:
     study_question: StudyQuestion = StudyQuestion("Computer Science","How many bits in a byte?","8",2)
     quiz: Quiz = Quiz("Computer Science",[study_question])
@@ -44,5 +61,25 @@ def test_quiz_controller_propagates_value_error() -> None:
     with pytest.raises(ValueError):
        quiz_controller.submit_answers(["8"])
 
-   
+def test_reset_quiz(quiz_controller: QuizController) -> None:
+    quiz_controller.current_index = 1
 
+    quiz_controller.add_student_answer("8")
+    quiz_controller.add_student_answer("1024")
+    assert len(quiz_controller.student_answers) == 2
+    quiz_controller.reset_quiz()
+
+    
+    assert quiz_controller.current_index == 0
+    assert quiz_controller.student_answers == []
+
+@pytest.mark.parametrize("starting_index, expected_index",
+                         [(0,1),
+                          (1,1)
+                          ]
+                        )
+def test_next_question(quiz_controller: QuizController, starting_index: int, expected_index: int) -> None:
+        quiz_controller.current_index = starting_index
+        quiz_controller.next_question()
+
+        assert quiz_controller.current_index == expected_index
