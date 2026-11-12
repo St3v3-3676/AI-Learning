@@ -53,7 +53,16 @@ class MainWindow(QWidget):
         self.next_question_button.setFont(QFont("Arial", 12))
         self.next_question_button.clicked.connect(self.show_next_question)
         self.next_question_button.hide()
+       
 
+        self.reset_quiz_button = QPushButton("Reset Quiz")
+        self.reset_quiz_button.setFont(QFont("Arial", 12))
+        self.reset_quiz_button.clicked.connect(self.quiz_controller.reset_quiz)
+        self.reset_quiz_button.hide()
+
+        self.start_button = QPushButton("Start Quiz")
+        self.start_button.clicked.connect(self.start_quiz)
+        layout.addWidget(self.start_button)
 
         layout.addWidget(self.label_quiz_title)
         layout.addWidget(self.label_quiz_select)
@@ -63,12 +72,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.answer_button)
         layout.addWidget(self.next_question_button)
         layout.addWidget(self.result_label)
-        
-        
-
-        self.start_button = QPushButton("Start Quiz")
-        self.start_button.clicked.connect(self.start_quiz)
-        layout.addWidget(self.start_button)
+        layout.addWidget(self.reset_quiz_button)
 
         self.setLayout(layout)
 
@@ -84,23 +88,35 @@ class MainWindow(QWidget):
         self.answer_input.show()
         self.answer_button.setEnabled(True)
         self.answer_button.show()
+        self.next_question_button.setEnabled(False)
+        self.next_question_button.show()
         self.start_button.hide()
 
     def submit_answer(self) -> None:
         student_answer = self.answer_input.text()
-        quiz_result: QuizResult = self.quiz_controller.submit_answers([student_answer])
-        self.result_label.setText(f"Your score: {quiz_result.percentage}%")
+        self.quiz_controller.add_student_answer(student_answer)
         self.answer_button.setEnabled(False)
-        self.next_question_button.show()
 
+        if self.quiz_controller.current_index < self.quiz_controller.get_number_of_questions() - 1:
+            self.next_question_button.setEnabled(True)                                             
+        else:
+            self.next_question_button.hide()
+            self.answer_button.hide()
+            quiz_result: QuizResult = self.quiz_controller.submit_answers(self.quiz_controller.student_answers)
+            self.result_label.setText(f"Your score: {quiz_result.percentage}%")
+  
     def show_next_question(self) -> None:
         self.answer_input.clear()
-        self.next_question_button.show()
         self.quiz_controller.next_question()
         current_question = self.quiz_controller.get_current_question()
         self.question_label.setText(current_question.display_question())
         self.question_number_label.setText(f"Question {self.quiz_controller.current_index + 1} of {self.quiz_controller.get_number_of_questions()}")
-        
+        self.answer_button.setEnabled(True)
+        self.next_question_button.setEnabled(False)
+
+
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -112,7 +128,13 @@ if __name__ == "__main__":
                 "Computer Science",
                 "How many bits in a byte?",
                 "8",
-                2)
+                2),
+            StudyQuestion(
+                "Computer Science",
+                "How many bytes in a Kibibyte?",
+                "1024",
+                2
+            )
             ]
     )
                                                       
