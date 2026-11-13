@@ -27,3 +27,5 @@ class QuizController:
     def reset_quiz(self) -> None:
         self.current_index = 0
         self.student_answers = []
+
+    

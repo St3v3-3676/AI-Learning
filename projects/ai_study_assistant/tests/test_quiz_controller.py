@@ -83,3 +83,12 @@ def test_next_question(quiz_controller: QuizController, starting_index: int, exp
         quiz_controller.next_question()
 
         assert quiz_controller.current_index == expected_index
+
+def test_add_multiple_answers(quiz_controller: QuizController) -> None:
+     quiz_controller.add_student_answer("8")
+     quiz_controller.add_student_answer("1024")
+     assert quiz_controller.student_answers == ["8","1024"]
+
+def test_add_empty_answers(quiz_controller: QuizController) -> None:
+     quiz_controller.add_student_answer("")
+     assert quiz_controller.student_answers == [""]
