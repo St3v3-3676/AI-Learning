@@ -28,7 +28,9 @@ class MainWindow(QWidget):
         self.label_quiz_title = QLabel("Welcome to AI Study Assistant")
         self.label_quiz_title.setFont(QFont("Arial", 20))
         self.label_quiz_select = QLabel("Select a quiz to begin")
+        
         self.result_label = QLabel("")
+        self.result_label.hide()
 
         self.question_label = QLabel("")
         self.question_label.setFont(QFont("Arial", 16))
@@ -102,6 +104,7 @@ class MainWindow(QWidget):
         else:
             self.next_question_button.hide()
             self.answer_button.hide()
+            self.result_label.show()
             quiz_result: QuizResult = self.quiz_controller.submit_answers(self.quiz_controller.student_answers)
             self.result_label.setText(f"Your score: {quiz_result.percentage}%")
             self.reset_quiz_button.show()

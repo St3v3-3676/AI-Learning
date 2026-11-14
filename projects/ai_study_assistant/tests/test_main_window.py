@@ -3,6 +3,7 @@ from PySide6.QtCore import Qt
 from controllers.quiz_controller import QuizController
 from models.quiz import Quiz
 from models.study_question import StudyQuestion
+from models.quiz_result import QuizResult
 
 from gui.main_window import MainWindow
 
@@ -33,7 +34,7 @@ def test_start_quiz_displays_question_number(quiz_controller: QuizController, ma
 
     #ASSERT
     assert main_window.question_number_label.text() == "Question 1 of 2"
-    assert main_window.question_label.text() == f"Question: How many bits are there in a byte?\nMarks: 2\n"
+    assert main_window.question_label.text() == "Question: How many bits are there in a byte?\nMarks: 2\n"
     assert main_window.start_button.isHidden()
     assert main_window.answer_button.isVisible()
     assert main_window.answer_button.isEnabled()
@@ -87,16 +88,55 @@ def test_complete_quiz(quiz_controller: QuizController, main_window: MainWindow,
     assert not(main_window.answer_button.isVisible())
     assert not(main_window.next_question_button.isVisible())
 
-# def test_reset_quiz(main_window: MainWindow, qtbot) -> None:
-#     #ARRANGE
-#     qtbot.mouseClick(main_window.start_button, Qt.MouseButton.LeftButton)
-#     qtbot.keyClicks(main_window.answer_input, "8")
-#     qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
-#     qtbot.mouseClick(main_window.next_question_button, Qt.MouseButton.LeftButton)
-#     qtbot.keyClicks(main_window.answer_input, "1024")
-#     qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
-#     #ACT
-#     qtbot.mouseClick(main_window.reset_quiz_button, Qt.MouseButton.LeftButton)
-#     #ASSERT
+def test_reset_quiz(quiz_controller: QuizController, main_window: MainWindow, qtbot) -> None:
+    #ARRANGE
+    qtbot.mouseClick(main_window.start_button, Qt.MouseButton.LeftButton)
+    qtbot.keyClicks(main_window.answer_input, "8")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    qtbot.mouseClick(main_window.next_question_button, Qt.MouseButton.LeftButton)
+    qtbot.keyClicks(main_window.answer_input, "1024")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    assert main_window.result_label.text() == "Your score: 100.0%"
+    #ACT
+    qtbot.mouseClick(main_window.reset_quiz_button, Qt.MouseButton.LeftButton)
+    #ASSERT
+    assert main_window.question_number_label.text() == "Question 1 of 2"
+    assert main_window.question_label.text() == "Question: How many bits are there in a byte?\nMarks: 2\n"
+    assert main_window.answer_input.text() == ""
+    assert main_window.answer_button.isEnabled()
+    assert main_window.answer_button.isVisible()
+    assert main_window.next_question_button.isVisible()
+    assert not(main_window.next_question_button.isEnabled())
+    assert quiz_controller.student_answers == []
+    assert quiz_controller.current_index == 0
+    assert main_window.result_label.text() == ""
+
+def test_complete_quiz_with_incorrect_answers(quiz_controller: QuizController, main_window: MainWindow, qtbot) -> None:
+    #ARRANGE
+    qtbot.mouseClick(main_window.start_button, Qt.MouseButton.LeftButton)
+    #ACT
+    qtbot.keyClicks(main_window.answer_input, "8")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    qtbot.mouseClick(main_window.next_question_button, Qt.MouseButton.LeftButton)
+    qtbot.keyClicks(main_window.answer_input, "1000")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    assert main_window.result_label.text() == "Your score: 50.0%"
     
+def test_complete_quiz_with_all_incorrect_answers(quiz_controller: QuizController, main_window: MainWindow, qtbot) -> None:
+    #ARRANGE
+    qtbot.mouseClick(main_window.start_button, Qt.MouseButton.LeftButton)
+    #ACT
+    qtbot.keyClicks(main_window.answer_input, "5")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    qtbot.mouseClick(main_window.next_question_button, Qt.MouseButton.LeftButton)
+    qtbot.keyClicks(main_window.answer_input, "1000")
+    #ASSERT
+    assert not main_window.result_label.isVisible()
+    print(f"Visible: {main_window.result_label.isVisible()}")
+    print(f"Text: {main_window.result_label.text()!r}")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    assert main_window.result_label.isVisible()
+    assert main_window.result_label.isEnabled()
+    assert main_window.result_label.text() == "Your score: 0.0%"
+
 
