@@ -86,3 +86,17 @@ def test_complete_quiz(quiz_controller: QuizController, main_window: MainWindow,
     assert main_window.reset_quiz_button.isEnabled()
     assert not(main_window.answer_button.isVisible())
     assert not(main_window.next_question_button.isVisible())
+
+# def test_reset_quiz(main_window: MainWindow, qtbot) -> None:
+#     #ARRANGE
+#     qtbot.mouseClick(main_window.start_button, Qt.MouseButton.LeftButton)
+#     qtbot.keyClicks(main_window.answer_input, "8")
+#     qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+#     qtbot.mouseClick(main_window.next_question_button, Qt.MouseButton.LeftButton)
+#     qtbot.keyClicks(main_window.answer_input, "1024")
+#     qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+#     #ACT
+#     qtbot.mouseClick(main_window.reset_quiz_button, Qt.MouseButton.LeftButton)
+#     #ASSERT
+    
+
