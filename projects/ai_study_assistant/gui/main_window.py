@@ -1,11 +1,8 @@
 import sys
-from pathlib import Path
 
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QLineEdit
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from controllers.quiz_controller import QuizController
 from models.quiz import Quiz
@@ -100,13 +97,23 @@ class MainWindow(QWidget):
         self.answer_button.setEnabled(False)
 
         if self.quiz_controller.current_index < self.quiz_controller.get_number_of_questions() - 1:
-            self.next_question_button.setEnabled(True)                                             
+            self.next_question_button.setEnabled(True)
         else:
             self.next_question_button.hide()
             self.answer_button.hide()
-            self.result_label.show()
-            quiz_result: QuizResult = self.quiz_controller.submit_answers(self.quiz_controller.student_answers)
+
+            try:
+                quiz_result: QuizResult = self.quiz_controller.submit_answers(
+                    self.quiz_controller.student_answers
+                )
+            except ValueError as error:
+                self.result_label.setText(str(error))
+                self.result_label.show()
+                self.reset_quiz_button.show()
+                return
+
             self.result_label.setText(f"Your score: {quiz_result.percentage}%")
+            self.result_label.show()
             self.reset_quiz_button.show()
 
   

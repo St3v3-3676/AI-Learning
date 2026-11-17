@@ -1,4 +1,5 @@
 import pytest
+from unittest import mock
 from PySide6.QtCore import Qt
 from controllers.quiz_controller import QuizController
 from models.quiz import Quiz
@@ -138,5 +139,43 @@ def test_complete_quiz_with_all_incorrect_answers(quiz_controller: QuizControlle
     assert main_window.result_label.isVisible()
     assert main_window.result_label.isEnabled()
     assert main_window.result_label.text() == "Your score: 0.0%"
+
+def test_marking_error_displays_message_and_allows_restart(
+    quiz_controller: QuizController,
+    main_window: MainWindow,
+    qtbot,
+) -> None:
+    qtbot.mouseClick(main_window.start_button, Qt.MouseButton.LeftButton)
+    qtbot.keyClicks(main_window.answer_input, "8")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    qtbot.mouseClick(main_window.next_question_button, Qt.MouseButton.LeftButton)
+
+    with mock.patch.object(
+        quiz_controller,
+        "submit_answers",
+        side_effect=ValueError("Unable to mark the quiz."),
+    ) as mocked_submit:
+        qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+
+    assert main_window.result_label.text() == "Unable to mark the quiz."
+    assert main_window.result_label.isVisible()
+    assert main_window.reset_quiz_button.isVisible()
+    mocked_submit.assert_called_once_with(["8", ""])
+
+    qtbot.mouseClick(main_window.reset_quiz_button, Qt.MouseButton.LeftButton)
+
+    assert quiz_controller.student_answers == []
+    assert quiz_controller.current_index == 0
+    assert main_window.result_label.text() == ""
+    assert main_window.answer_button.isVisible()
+    assert main_window.answer_button.isEnabled()
+
+    qtbot.keyClicks(main_window.answer_input, "8")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+    qtbot.mouseClick(main_window.next_question_button, Qt.MouseButton.LeftButton)
+    qtbot.keyClicks(main_window.answer_input, "1024")
+    qtbot.mouseClick(main_window.answer_button, Qt.MouseButton.LeftButton)
+
+    assert main_window.result_label.text() == "Your score: 100.0%"
 
 
