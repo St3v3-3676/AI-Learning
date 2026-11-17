@@ -79,10 +79,10 @@ def test_reset_quiz(quiz_controller: QuizController) -> None:
                           ]
                         )
 def test_next_question(quiz_controller: QuizController, starting_index: int, expected_index: int) -> None:
-        quiz_controller.current_index = starting_index
-        quiz_controller.next_question()
+    quiz_controller.current_index = starting_index
+    quiz_controller.next_question()
 
-        assert quiz_controller.current_index == expected_index
+    assert quiz_controller.current_index == expected_index
 
 def test_add_multiple_answers(quiz_controller: QuizController) -> None:
      quiz_controller.add_student_answer("8")
@@ -92,3 +92,11 @@ def test_add_multiple_answers(quiz_controller: QuizController) -> None:
 def test_add_empty_answers(quiz_controller: QuizController) -> None:
      quiz_controller.add_student_answer("")
      assert quiz_controller.student_answers == [""]
+
+def test_mark_quiz_with_too_many_answers(quiz_controller: QuizController) -> None:
+    #ARRANGE((
+    student_answers = ["8"] * (quiz_controller.get_number_of_questions() + 1)
+    #ACT and ASSERT
+    with pytest.raises(ValueError):
+        quiz_controller.submit_answers(student_answers)
+
